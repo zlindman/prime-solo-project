@@ -19,6 +19,9 @@ import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
+import BeginLifting from '../BeginLifting/BeginLifting';
+import PlanTemplate from '../PlanTemplate/PlanTemplate';
+import ViewHistory from '../ViewHistory/ViewHistory';
 
 import './App.css';
 
@@ -109,6 +112,27 @@ function App() {
               <LandingPage />
             }
           </Route>
+
+          <ProtectedRoute
+            exact
+            path="/BeginLifting"
+            >
+              <BeginLifting />
+            </ProtectedRoute>
+
+            <ProtectedRoute
+            exact
+            path="/PlanTemplate"
+            >
+              <PlanTemplate />
+            </ProtectedRoute>
+
+            <ProtectedRoute
+            exact
+            path="/ViewHistory"
+            >
+              <ViewHistory />
+            </ProtectedRoute>
 
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>
