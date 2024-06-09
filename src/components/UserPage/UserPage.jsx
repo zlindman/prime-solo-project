@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import LogOutButton from '../LogOutButton/LogOutButton';
-import BeginLifting from '../BeginLifting/BeginLifting';
+// import BeginLifting from '../BeginLifting/BeginLifting';
+// import PlanTemplate from '../PlanTemplate/PlanTemplate';
+// import ViewHistory from '../ViewHistory/ViewHistory';
 
 function UserPage() {
   // this component doesn't do much to start, just renders some user reducer info to the DOM

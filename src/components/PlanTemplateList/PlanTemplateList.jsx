@@ -6,11 +6,11 @@ import axios from 'axios';
 function PlanTemplate() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const planData = useSelector((store) => store.planData);
+  const planData = useSelector((store) => store.plans);
 
-  const [editPlanData, setEditPlanData] = useState({ name: '', lifts: [] });
+  const [plan, setPlan] = useState({ name: '', lifts: [] });
   const [editName, setEditName] = useState('');
-  const [addLift, setAddLift] = useState({ name: '', weight: '', sets: '', reps: '' });
+  const [addLift, setAddLift] = useState({ liftName: '', weight: '', sets: '', reps: '' });
 
   const grabPlanData = () => {
     axios.get('/api/planData')
@@ -71,7 +71,7 @@ function PlanTemplate() {
   };
 
   const handleCompleteEdit = () => {
-    dispatch({ type: 'SET_PLAN_DATA', payload: plan });
+    dispatch({ type: 'UPDATE_PLAN_DATA', payload: plan });
     history.push('/PlanPreview');
   };
 
