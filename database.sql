@@ -33,7 +33,9 @@ CREATE TABLE "activity_log" (
 	"sets" INT,
 	"reps" INT,
 	"weight" DECIMAL,
-	"difficulty" INT,
-	"comments" INT
+	"difficulty" VARCHAR(20),
+	"comments" VARCHAR(50)
 );
+
+
 
