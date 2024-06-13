@@ -11,7 +11,6 @@ CREATE TABLE "user" (
 CREATE TABLE "plans" (
 	"id" SERIAL PRIMARY KEY,
 	"name" VARCHAR (50),
-	"user_id" INT REFERENCES "user"
 );
 
 CREATE TABLE "lifts" (
@@ -20,15 +19,10 @@ CREATE TABLE "lifts" (
 	"plan_id" INT REFERENCES "plans"
 );
 
-CREATE TABLE "recent_activity" (
-	"id" SERIAL PRIMARY KEY,
-	"plan_id" INT REFERENCES "plans",
-	"activity_timestamp" TIMESTAMP
-);
 
 CREATE TABLE "activity_log" (
 	"id" SERIAL PRIMARY KEY,
-	"recent_activity_id" INT REFERENCES "recent_activity",
+	"plan_id" INT REFERENCES "plans",
 	"lift_id" INT REFERENCES "lifts",
 	"sets" INT,
 	"reps" INT,

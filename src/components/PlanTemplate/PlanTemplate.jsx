@@ -39,72 +39,109 @@ function PlanTemplate() {
     //         });
     // }, [dispatch]); 
 
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             // create a new plan and retrieve it's id
+    //             const response = await axios.post('/api/planData/create-plan');
+    //             const { planId } = response.data;
+    //             setPlanId(planId);
+    //             console.log('Created or retrieved plan ID:', planId);
+    //             console.log('response.data', response.data);
+
+    //             const planDataResponse = await axios.get(`/api/planData/${planId}`);
+    //             console.log('planDataResponse', planDataResponse);
+    //             console.log('Fetched plan data:', planDataResponse.data);
+    //             dispatch({ type: 'SET_PLAN_DATA', payload: planDataResponse.data });
+    //             setEditName(planDataResponse.data.plan_name) || 'My Plan';
+    //         } catch (error) {
+    //             console.error('Error generating or retrieving plan ID:', error);
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, [dispatch]);
+
     useEffect(() => {
-        const fetchData = async () => {
+        const createPlan = async () => {
             try {
                 const response = await axios.post('/api/planData/create-plan');
                 const { planId } = response.data;
                 setPlanId(planId);
                 console.log('Created or retrieved plan ID:', planId);
-    
-                const planDataResponse = await axios.get(`/api/planData/${planId}`);
-                console.log('Fetched plan data:', planDataResponse.data);
-                dispatch({ type: 'SET_PLAN_DATA', payload: planDataResponse.data });
             } catch (error) {
                 console.error('Error generating or retrieving plan ID:', error);
             }
         };
-    
-        fetchData();
-    }, [dispatch]);
-    
+
+        createPlan();
+    }, []);
+
 
     // updates the editName state when planData changes
-    useEffect(() => {
-        if (planData && planData.plan_name) {
-            setEditName(planData.plan_name);
-        }
-        console.log('Plan ID in component:', planId);  // Add this
-    }, [planData]);
+    // useEffect(() => {
+    //     if (planData && planData.plan_name) {
+    //         setEditName(planData.plan_name);
+    //     }
+    //     console.log('Plan ID in component:', planId); 
+    //     console.log('planData'. planData); 
+    //     console.log('planData.plan_name', planData.plan_name);
+    // }, [planData]);
 
 
-    const handleEditName = () => {
+    // const handleEditName = () => {
+    //     if (editName !== '') {
+    //         axios.put('/api/planData', { id: planId, name: editName })
+    //             .then(response => {
+    //                 console.log('plan id', planId);
+    //                 console.log('editName useState', editName);
+    //                 console.log('Plan name updated successfully', planData.plan_name);
+    //                 dispatch({ type: 'FETCH_PLAN_DATA', payload: planId });
+    //                 setEditName('');
+    //             })
+    //             .catch(error => {
+    //                 console.error('Error updating plan name:', error);
+    //                 alert('Something went wrong while updating the plan name!');
+    //             });
+    //     }
+    // };
+
+    const handleEditName = async () => {
         if (editName !== '') {
-            axios.put('/api/planData', { id: planId, name: editName })
-                .then(response => {
-                    console.log('plan id', planId);
-                    console.log('editName useState', editName);
-                    console.log('Plan name updated successfully', planData.plan_name);
-                    dispatch({ type: 'FETCH_PLAN_DATA', payload: planId });
-                    setEditName('');
-                })
-                .catch(error => {
-                    console.error('Error updating plan name:', error);
-                    alert('Something went wrong while updating the plan name!');
-                });
+            try {
+                await axios.put('/api/planData', { id: planId, name: editName });
+                console.log('Plan name updated successfully');
+                const updatedPlanData = { ...planData, plan_name: editName };
+                dispatch({ type: 'SET_PLAN_DATA', payload: updatedPlanData });
+            } catch (error) {
+                console.error('Error updating plan name:', error);
+                alert('Something went wrong while updating the plan name!');
+            }
         }
     };
 
     const handleAddLift = async (event) => {
         event.preventDefault();
         const liftData = {
-          name: addLift.name,
-          sets: addLift.sets,
-          reps: addLift.reps,
-          weight: addLift.weight,
-          planId: planId,
+            name: addLift.name,
+            sets: addLift.sets,
+            reps: addLift.reps,
+            weight: addLift.weight,
+            planId: planId,
         };
         try {
-          const response = await axios.post('/api/planData/add-lift', liftData);
-          console.log('Lift added successfully:', response.data);
-          console.log('liftData', liftData);
-          dispatch({ type: 'FETCH_PLAN_DATA', payload: planId });
-          setAddLift({ name: '', sets: '', reps: '', weight: '' });
+            await axios.post('/api/planData/add-lift', liftData);
+            console.log('Lift added successfully:', liftData);
+            // fetch updated plan data after adding a lift
+            const planDataResponse = await axios.get(`/api/planData/${planId}`);
+            dispatch({ type: 'SET_PLAN_DATA', payload: planDataResponse });
+            // clears input fields after adding a lift
+            setAddLift({ name: '', sets: '', reps: '', weight: '' });
         } catch (error) {
-          console.error('Error adding lift:', error);
-          alert('Something went wrong while adding the lift!');
+            console.error('Error adding lift:', error);
+            alert('Something went wrong while adding the lift!');
         }
-      };
+    };
 
     // const handleAddLift = (event) => {
     //     event.preventDefault();
@@ -132,15 +169,30 @@ function PlanTemplate() {
     //         });
     // };
 
-    const handleDeleteLift = (id) => {
-        axios.delete(`/api/planData/lifts/${id}`)
-            .then((response) => {
-                dispatch({ type: 'FETCH_PLAN_DATA' });
-            })
-            .catch((error) => {
-                console.log('error in delete', error);
-                alert('Something went wrong!');
-            });
+    // const handleDeleteLift = (id) => {
+    //     axios.delete(`/api/planData/lifts/${id}`)
+    //         .then((response) => {
+    //             dispatch({ type: 'FETCH_PLAN_DATA', payload: planId });
+    //         })
+    //         .catch((error) => {
+    //             console.log('error in delete', error);
+    //             alert('Something went wrong!');
+    //         });
+    // };
+
+    // Handle deleting a lift from the plan
+    const handleDeleteLift = async (id) => {
+        try {
+            await axios.delete(`/api/planData/lifts/${id}`);
+            console.log('Lift deleted successfully');
+
+            // Fetch the updated plan data after deleting the lift
+            const planDataResponse = await axios.get(`/api/planData/${planId}`);
+            dispatch({ type: 'SET_PLAN_DATA', payload: planDataResponse.data });
+        } catch (error) {
+            console.error('Error deleting lift:', error);
+            alert('Something went wrong while deleting the lift!');
+        }
     };
 
     const handleCompleteEdit = () => {
@@ -177,7 +229,7 @@ function PlanTemplate() {
                 </thead>
                 <tbody>
                     {planData.lifts && planData.lifts.map((lift) => (
-                        <tr key={lift.plan_id}>
+                        <tr key={lift.lift_id}>
                             <td>{lift.lift_name}</td>
                             <td>{lift.sets}</td>
                             <td>{lift.reps}</td>
@@ -187,8 +239,8 @@ function PlanTemplate() {
                             </td>
                         </tr>
                     )
-                    
-                    
+
+
                     )}
                 </tbody>
             </table>

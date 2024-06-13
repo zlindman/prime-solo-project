@@ -1,4 +1,9 @@
-const planDataReducer = (state = {}, action) => {
+const initialState = {
+  plan_name: '',
+  lifts: []
+}
+
+const planDataReducer = (state = initialState, action) => {
     switch (action.type) {
       case 'SET_PLAN_DATA':
         console.log('SET_PLAN_DATA action.payload:', action.payload);

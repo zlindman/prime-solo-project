@@ -137,7 +137,7 @@ function App() {
 
             <ProtectedRoute
             exact
-            path="/PlanPreview"
+            path="/plan/:id"
             >
               <PlanPreview />
             </ProtectedRoute>
