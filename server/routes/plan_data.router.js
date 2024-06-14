@@ -76,6 +76,56 @@ WHERE "activity_log"."user_id" = $1 AND "plans"."id" = $2
  }
 });
 
+// TODO: add PUT route for updating difficulty and comments
+
+// POST for adding plan data
+router.post('/', (req, res) => {
+  // POST route code here
+  if (req.isAuthenticated()) {
+    console.log(req.body);
+    const { lift_id, sets, reps, weight, difficulty, comments } = req.body;
+    const queryText = `
+    INSERT INTO "activity_log" ("user_id", "lift_id", "sets", "reps", "weight", "difficulty", "comments")
+    VALUES ($1, $2, $3, $4, $5, $6, $7);
+    `
+    pool.query(queryText, [req.user.id, lift_id, sets, reps, weight, difficulty, comments])
+      .then(result => {
+        console.log('req.body', req.body);
+        res.sendStatus(201);
+      })
+      .catch(error => {
+        console.error('Error adding lift data:', error);
+        console.log('error adding', req.body);
+        res.sendStatus(500);
+      });
+  } else {
+    res.sendStatus(403);
+  }
+});
+
+// DELETE route to remove a lift from the plan
+router.delete('/:activityId', (req, res) => {
+  if (req.isAuthenticated()) {
+    const activityId = req.params.activityId;
+    const queryText = `
+      DELETE FROM activity_log
+      WHERE id = $1;
+    `;
+    pool.query(queryText, [activityId])
+      .then(result => {
+        res.sendStatus(200);
+      })
+      .catch(error => {
+        console.error('Error deleting lift:', error);
+        res.sendStatus(500);
+      });
+  } else {
+    res.sendStatus(403);
+  }
+});
+
+module.exports = router;
+
 
 /**
 //  * GET route template
@@ -162,50 +212,3 @@ WHERE "activity_log"."user_id" = $1 AND "plans"."id" = $2
 //   }
 // });
 
-// POST for adding plan data
-router.post('/', (req, res) => {
-  // POST route code here
-  if (req.isAuthenticated()) {
-    console.log(req.body);
-    const { lift_id, sets, reps, weight, difficulty, comments } = req.body;
-    const queryText = `
-    INSERT INTO "activity_log" ("user_id", "lift_id", "sets", "reps", "weight", "difficulty", "comments")
-    VALUES ($1, $2, $3, $4, $5, $6, $7);
-    `
-    pool.query(queryText, [req.user.id, lift_id, sets, reps, weight, difficulty, comments])
-      .then(result => {
-        console.log('req.body', req.body);
-        res.sendStatus(201);
-      })
-      .catch(error => {
-        console.error('Error adding lift data:', error);
-        console.log('error adding', req.body);
-        res.sendStatus(500);
-      });
-  } else {
-    res.sendStatus(403);
-  }
-});
-
-// DELETE route to remove a lift from the plan
-router.delete('/:activityId', (req, res) => {
-  if (req.isAuthenticated()) {
-    const activityId = req.params.activityId;
-    const queryText = `
-      DELETE FROM activity_log
-      WHERE id = $1;
-    `;
-    pool.query(queryText, [activityId])
-      .then(result => {
-        res.sendStatus(200);
-      })
-      .catch(error => {
-        console.error('Error deleting lift:', error);
-        res.sendStatus(500);
-      });
-  } else {
-    res.sendStatus(403);
-  }
-});
-
-module.exports = router;

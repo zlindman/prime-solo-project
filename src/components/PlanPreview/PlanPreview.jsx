@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {useSelector} from 'react-redux';
+// import {useSelector} from 'react-redux';
 import {useParams} from 'react-router-dom';
 import axios from 'axios';
 
@@ -66,7 +66,7 @@ const handleAddLift = async (event) => {
       <h2>Add Lift</h2>
       <form onSubmit={(event) => handleAddLift(event)}>
         {/* TODO: map over list of lifts for a plan */}
-        <select name="lifts" id="cars"
+        <select name="lifts" id="lifts"
         value={addLift.name} // ...force the select's value to match the state variable...
         onChange={(e) => setAddLift({ ...addLift, name: e.target.value })}>
           {
