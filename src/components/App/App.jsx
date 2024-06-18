@@ -22,7 +22,7 @@ import RegisterPage from '../RegisterPage/RegisterPage';
 import BeginLifting from '../BeginLifting/BeginLifting';
 import PlanTemplate from '../PlanTemplate/PlanTemplate';
 import ViewHistory from '../ViewHistory/ViewHistory';
-import PlanPreview from '../PlanPreview/PlanPreview';
+import PlanList from '../PlanList/PlanList';
 
 import './App.css';
 
@@ -139,7 +139,7 @@ function App() {
             exact
             path="/plan/:id"
             >
-              <PlanPreview />
+              <PlanList />
             </ProtectedRoute>
 
           {/* If none of the other routes matched, we will show a 404. */}

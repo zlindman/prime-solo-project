@@ -2,18 +2,19 @@ import React, { useState, useEffect } from 'react';
 // import {useSelector} from 'react-redux';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import PlanItem from '../PlanItem/PlanItem.jsx'
 
 // Basic functional component structure for React with default state
 // value setup. When making a new component be sure to replace the
 // component name TemplateFunction with the name for the new component.
-function PlanPreview() {
+function PlanList() {
   // Using hooks we're creating local state for a "heading" variable with
   // a default value of 'Functional Component'
-  const [planHistory, setPlanHistory] = useState([]);
+  const [planList, setPlanList] = useState([]);
   const [lifts, setLifts] = useState([]);
   const { id } = useParams();
   const [addLift, setAddLift] = useState({ name: '', sets: '', reps: '', weight: '' });
-  const [liftDetails, setLiftDetails] = useState({});
+  // const [liftDetails, setLiftDetails] = useState({});
 
   useEffect(() => {
     fetchPlanDetails();
@@ -24,21 +25,21 @@ function PlanPreview() {
 
   const fetchPlanDetails = () => {
     axios.get(`/api/planData/${id}`).then(response => {
-      setPlanHistory(response.data);
+      setPlanList(response.data);
     })
   }
 
-  const handleDeleteLift = async (id) => {
-    try {
-      await axios.delete(`/api/planData/${id}`);
-      console.log('Lift deleted successfully');
-      fetchPlanDetails();
+  // const handleDeleteLift = async (id) => {
+  //   try {
+  //     await axios.delete(`/api/planData/${id}`);
+  //     console.log('Lift deleted successfully');
+  //     fetchPlanDetails();
 
-    } catch (error) {
-      console.error('Error deleting lift:', error);
-      alert('Something went wrong while deleting the lift!');
-    }
-  };
+  //   } catch (error) {
+  //     console.error('Error deleting lift:', error);
+  //     alert('Something went wrong while deleting the lift!');
+  //   }
+  // };
 
   const handleAddLift = async (event) => {
     event.preventDefault();
@@ -61,34 +62,34 @@ function PlanPreview() {
     }
   };
 
-  const handleInputChange = (activityId, field, value) => {
-    setLiftDetails(prevState => ({
-      ...prevState, // prevState references the previous state of the liftDetails object
-      [activityId]: { // [activityId] is a computed property name that updates the property in 'liftDetails' 
-        // corresponding to a specific 'liftId'
-        ...prevState[activityId],
-        [field]: value, // [field] is a computed property name for the field being updated and 'value'
-        // is the new value being set for that field
-      },
-    }));
-  };
+  // const handleInputChange = (activityId, field, value) => {
+  //   setLiftDetails(prevState => ({
+  //     ...prevState, // prevState references the previous state of the liftDetails object
+  //     [activityId]: { // [activityId] is a computed property name that updates the property in 'liftDetails' 
+  //       // corresponding to a specific 'liftId'
+  //       ...prevState[activityId],
+  //       [field]: value, // [field] is a computed property name for the field being updated and 'value'
+  //       // is the new value being set for that field
+  //     },
+  //   }));
+  // };
 
-  const handleUpdateLift = async (activityId, event) => {
-    event.preventDefault();
-    const updatedData = liftDetails[activityId];
-    try {
-      await axios.put(`/api/planData/activity/${activityId}`, updatedData);
-      console.log('Lift updated successfully');
-      fetchPlanDetails();
-      setLiftDetails((prevState) => ({
-        ...prevState,
-        [activityId]: { difficulty: '', comments: '' },
-      }));
-    } catch (error) {
-      console.error('Error updating lift:', error);
-      alert('Something went wrong while updating the lift!');
-    }
-  };
+  // const handleUpdateLift = async (activityId, event) => {
+  //   event.preventDefault();
+  //   const updatedData = liftDetails[activityId];
+  //   try {
+  //     await axios.put(`/api/planData/activity/${activityId}`, updatedData);
+  //     console.log('Lift updated successfully');
+  //     fetchPlanDetails();
+  //     setLiftDetails((prevState) => ({
+  //       ...prevState,
+  //       [activityId]: { difficulty: '', comments: '' },
+  //     }));
+  //   } catch (error) {
+  //     console.error('Error updating lift:', error);
+  //     alert('Something went wrong while updating the lift!');
+  //   }
+  // };
 
   return (
     <div>
@@ -101,7 +102,7 @@ function PlanPreview() {
           onChange={(e) => setAddLift({ ...addLift, name: e.target.value })}>
           {
             lifts.map(lift => (
-              <option value={lift.id}>{lift.name}</option>
+              <option key= {lift.id} value={lift.id}>{lift.name}</option>
             ))
           }
         </select>
@@ -111,9 +112,11 @@ function PlanPreview() {
         <button type="submit">Add Lift</button>
       </form>
 
+      
+
       <h2>Plan Details</h2>
       {/* {
-        JSON.stringify(planHistory)
+        JSON.stringify(planList)
       } */}
       <table>
         <thead>
@@ -127,7 +130,18 @@ function PlanPreview() {
           </tr>
         </thead>
         <tbody>
-          {/* TODO move this into it's own component */}
+          {planList.map(lift => (
+            <PlanItem key={lift.id} lift={lift} />
+          ))}
+        </tbody>
+      </table>
+</div>
+      );
+
+    }
+
+
+      {/* TODO move this into it's own component
           {planHistory.map((lift) => (
             <tr key={lift.id}>
               <td>{lift.lift_name}</td>
@@ -159,11 +173,7 @@ function PlanPreview() {
           )
 
 
-          )}
-        </tbody>
-      </table>
-    </div>
-  );
-}
+          )} */}
 
-export default PlanPreview;
+
+      export default PlanList;
