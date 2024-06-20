@@ -65,6 +65,7 @@ FROM "plans"
 JOIN "lifts" ON "plans"."id" = "lifts"."plan_id"
 LEFT JOIN "activity_log" ON "lifts"."id" = "activity_log"."lift_id"
 WHERE "activity_log"."user_id" = $1 AND "plans"."id" = $2
+ORDER BY "activity_log"."completed_at" DESC
    `;
     pool.query(queryText, [req.user.id, planId]).then((result) => {
       console.log('result', result.rows);
