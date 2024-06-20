@@ -3,9 +3,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  margin: 0 0 30px;
-  background-color: #00acb0;
+  margin: 0 0 0;
+  background-color: black;
   overflow: hidden;
 }
 
@@ -24,7 +23,7 @@
 .navLink {
   display: inline-block;
   color: #f2f2f2;
-  background-color: #00acb0;
+  background-color: black;
   text-align: center;
   padding: 24px 10px;
   text-decoration: none;
@@ -38,5 +37,12 @@
 }
 
 .navLink:hover {
-  background-color: #008183;
+  background-color: rgb(55, 50, 50);
+}
+
+@media (max-width: 768px) {
+  .navLink {
+    padding: 20px 16px; /* Further reduce padding for smaller screens */
+    font-size: 12px; /* Reduce font size for smaller screens */
+  }
 }

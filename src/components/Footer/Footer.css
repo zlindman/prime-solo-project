@@ -1,5 +1,7 @@
 footer {
-  margin-top: 80px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
   padding: 20px;
   text-align: center;
 }

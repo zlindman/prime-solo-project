@@ -59,7 +59,8 @@ router.get('/:planId', (req, res) => {
    "activity_log"."reps",
    "activity_log"."weight",
    "activity_log"."difficulty",
-   "activity_log"."comments"
+   "activity_log"."comments",
+   "activity_log"."completed_at"
 FROM "plans"
 JOIN "lifts" ON "plans"."id" = "lifts"."plan_id"
 LEFT JOIN "activity_log" ON "lifts"."id" = "activity_log"."lift_id"
