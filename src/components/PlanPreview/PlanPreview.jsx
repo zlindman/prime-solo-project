@@ -77,7 +77,7 @@ function PlanPreview() {
         <button type="submit">Add Lift</button>
       </form>
 
-      <h2>Plan Details</h2>
+      <h2>Lift History</h2>
       {/* {
         JSON.stringify(planHistory)
       } */}
