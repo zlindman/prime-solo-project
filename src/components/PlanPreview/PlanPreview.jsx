@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import PlanListItem from './PlanListItem';
+import './PlanPreview.css';
 
 // Basic functional component structure for React with default state
 // value setup. When making a new component be sure to replace the
@@ -20,13 +21,14 @@ function PlanPreview() {
     axios.get(`/api/planData/lifts/${id}`).then(response => {
       setLifts(response.data);
       if(response.data && response.data.length > 0) {
-        setAddLift({...addLift, name: response.data[0].id})
+        // setAddLift({...addLift, name: response.data[0].id})
       } 
     })
   }, [id]);
 
   const fetchPlanDetails = () => {
     axios.get(`/api/planData/${id}`).then(response => {
+      console.log('fetchPlanDetails', response.data)
       setPlanHistory(response.data);
     })
   }
@@ -53,14 +55,16 @@ function PlanPreview() {
   };
 
   return (
-    <div>
+    <div className="form">
       {/* TODO: form or button to add activity to the plan */}
       <h2>Add Lift</h2>
+      {/* {JSON.stringify(addLift)} */}
       <form onSubmit={(event) => handleAddLift(event)}>
         {/* TODO: map over list of lifts for a plan */}
         <select name="lifts" id="lifts"
           value={addLift.name} // ...force the select's value to match the state variable...
           onChange={(e) => setAddLift({ ...addLift, name: e.target.value })}>
+          <option value="">Select a Lift</option>
           {
             lifts.map(lift => (
               <option value={lift.id}>{lift.name}</option>
@@ -77,7 +81,8 @@ function PlanPreview() {
       {/* {
         JSON.stringify(planHistory)
       } */}
-      <table>
+      <div className="table-container">
+      <table className="table">
         <thead>
           <tr>
             <th>Lift Name</th>
@@ -86,6 +91,7 @@ function PlanPreview() {
             <th>Weight</th>
             <th>Difficulty</th>
             <th>Comments</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -96,6 +102,7 @@ function PlanPreview() {
           )}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

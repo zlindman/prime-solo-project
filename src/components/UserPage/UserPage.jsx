@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import './UserPage.css';
 // import BeginLifting from '../BeginLifting/BeginLifting';
 // import PlanTemplate from '../PlanTemplate/PlanTemplate';
 // import ViewHistory from '../ViewHistory/ViewHistory';
@@ -18,16 +19,21 @@ function UserPage() {
   }, []);
 
   return (
-    <div className="container">
-      <h2>Hello, {user.username}!</h2>
+    <div className="background-container">
+      <div className="background"></div>
+      <div className="greeting">
+      <h1>Hello, {user.username}!</h1>
+      </div>
+      <div className="content">
+      <h3>Select a Muscle Group...</h3>
       {
-        plans.map(plan => (
-          <>
-            <Link to={`plan/${plan.id}`}>{plan.name}</Link>
-            <br />
-          </>
-        ))
-      }
+                    plans.map(plan => (
+                        <div className="plan-link" key={plan.id}>
+                            <Link to={`plan/${plan.id}`}>{plan.name}</Link>
+                        </div>
+                    ))
+                }
+      </div>
     </div>
   );
 }
